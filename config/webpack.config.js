@@ -330,6 +330,10 @@ module.exports = function (webpackEnv) {
         ),
         "scheduler$": path.resolve(
           __dirname,
+          "../../react/build/node_modules/scheduler/cjs/scheduler.development.js"
+        ),
+        "react-reconciler$": path.resolve(
+          __dirname,
           "../../react/build/node_modules/react-scheduler/cjs/react-reconciler.development.js"
         ),
       },
