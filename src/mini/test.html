@@ -12,45 +12,40 @@
 
 <body>
   <div id="root"></div>
-
   <script>
     let isMount = true
     let workInProgressHook = null
-
-
     let currentlyRenderingFiber = {
       memoizedState: null,
       stateNode: App
     }
 
     function dispatchSetState(queue, action) {
+      // 创建 update 
       const update = {
         action,
         next: null
       }
 
-      // 判断是否存在cyc链表
-
-      if (queue.pending === null) {
+      // 入队更新 形成循环链表 enqueueRenderPhaseUpdate
+      if (queue.pending === null/*判断是否存在cyc链表 */) {
         update.next = update
       } else {
         update.next = queue.pending.next  // 当前的指向原来的第1个
-        queue.pending.next = update
-
+        queue.pending.next = update // 原来的
       }
       queue.pending = update
 
-      run()
+      run() // schedule
     }
 
     function useState(initialState) {
       let hook = null
       if (isMount) {
         /* 初始化阶段 */
-
         initialState = typeof initialState === "function" ? initialState() : initialState;
 
-
+        //创建 hook mountWorkInProgressHook | updateWorkInProgressHook
         hook = {
           memoizedState: initialState,
           next: null,
@@ -58,13 +53,13 @@
             pending: null
           },
         }
-
+        //挂载 hook
         if (!currentlyRenderingFiber.memoizedState) {
           currentlyRenderingFiber.memoizedState = hook
         } else {
           workInProgressHook.next = hook
         }
-
+        //赋值到当前
         workInProgressHook = hook
 
       } else {
@@ -78,7 +73,7 @@
       let baseState = hook.memoizedState // 先拿到传入的值
 
       const queue = hook.queue
-      /* 检查是否右需要计算的状态*/
+      /* 检查是否右需要计算的状态 updateReducer */
       if (queue.pending) {
         const pendingFirstQueue = queue.pending.next
         let update = pendingFirstQueue
@@ -115,13 +110,10 @@
       }
     }
 
-
     function run() {
-
       workInProgressHook = currentlyRenderingFiber.memoizedState
       const app = currentlyRenderingFiber.stateNode() // App
       isMount = false
-
       return app
     }
 

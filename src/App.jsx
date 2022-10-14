@@ -3,8 +3,25 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import SchedulerPriorityDemo from "./demo/SchedulerPriorityDemo";
 import AutomaticBatchedUpdate from "./demo/AutomaticBatchedUpdate";
 import SyntheticEventVsEvent from "./demo/SyntheticEventVsEvent";
+import EffectImplPhase from "./demo/EffectImplPhase";
+import RefDemo from "./demo/RefDemo";
+import ContextDemo from "./demo/ContextDemo";
+
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee",
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222",
+  },
+};
+
+export const ThemeContext = React.createContext(themes.light);
 
 function App() {
+  const [isMount, setMount] = useState(true);
   const [count, setCount] = useState(0);
 
   console.log("[Invoke App Function Component]", "count:", count);
@@ -30,9 +47,15 @@ function App() {
       <header className="App-header"></header>
       <p>{count}</p>
       <p onClick={debugHandleClick}>App</p>
-      <AutomaticBatchedUpdate></AutomaticBatchedUpdate>
-      {/* <SchedulerPriorityDemo></SchedulerPriorityDemo> */}
-      {/* <SyntheticEventVsEvent></SyntheticEventVsEvent> */}
+
+      {/* <ThemeContext.Provider value={themes.dark}>
+        <ContextDemo />
+      </ThemeContext.Provider> */}
+      <RefDemo />
+      {/* <AutomaticBatchedUpdate />
+      {isMount && <EffectImplPhase unMount={setMount} />}
+      <SchedulerPriorityDemo />
+      <SyntheticEventVsEvent /> */}
     </div>
   );
 }
