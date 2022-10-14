@@ -64,7 +64,6 @@ git clone https://github.com/facebook/react.git
 # 改sourceMap 配置 
 cd ./scripts/rollup/build.js
 
-
 function getRollupOutputOptions(
   outputPath,
   format,
@@ -215,9 +214,14 @@ link 我觉得不好使。
         ),// 【1】
         "scheduler$": path.resolve(
           __dirname,
-          "../../react/build/node_modules/react-scheduler/cjs/react-reconciler.development.js"
+          "../../react/build/node_modules/scheduler/umd/scheduler.development.js"
+        ),// 【1】
+        "react-reconciler$": path.resolve(
+          __dirname,
+          "../../react/build/node_modules/react-reconciler/cjs/react-reconciler.development.js"
         ),// 【1】
       },
+      // ModuleScopePlugin 这坨注释掉，会导致无法调转到源码
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
